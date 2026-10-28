@@ -1,6 +1,6 @@
 ---
 layout: runbook
-title: '#4471 · two problems, one ticket'
+title: '#4471 · two causes, one ticket'
 owner: olafsulich
 status: open
 reviewed: 2026-10-28
@@ -8,60 +8,59 @@ signature: olafsulich
 ---
 
 <script>
-  import ProblemTable from '#lib/kb/ProblemTable.svelte';
-  import ProblemReports from '#lib/kb/ProblemReports.svelte';
   import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
   import Callout from '#lib/kb/Callout.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
 
-[#4471](/kb/incidents/4471) is marked known: one issue, one fix queued. Its reports say otherwise.
-Read by what each report describes, #4471 holds two problems. The fix queued for the parser closes
-one of them.
+[#4471](/kb/incidents/4471) is marked known: one issue, one fix queued. The desk's own table says
+otherwise. Placed by tenant (where they are, and which booking form they run) instead of by subject
+or by intake's browser guess, #4471 holds two causes. The fix queued for the parser closes one.
 
 <Callout kind="warn">
-Not one issue. Each problem below has its own ticket and its own count.
+Not one issue. Each cause has its own ticket now:
+[parser · #1](https://github.com/olafsulich/support-kb/issues/1) and
+[hint · #2](https://github.com/olafsulich/support-kb/issues/2).
 </Callout>
 
 ## What #4471 holds
 
-<ProblemTable ticket={4471} />
+<CauseTable ticket={4471} />
 
-## The problems
+## The causes
 
-### `swap`: day and month trade places
+### `parser` · [#1](https://github.com/olafsulich/support-kb/issues/1)
 
-Every tenant in #4471 writes the day first. Their dates come out month first: 7 April becomes
-4 July. This is the problem #4471 was opened for, and the queued parser fix is for this one.
+The shared parser reads every date month first. Every tenant in #4471 writes the day first, so any
+date with a day of 12 or less comes out with day and month swapped: 7 April becomes 4 July. This is
+the cause #4471 was opened for, and the queued fix is for this one.
 
-The old table splits off a `hint` cause: tenants on `booking-v3` whose reports came through the
-form. Those reports describe the same swap, in the same words, and nothing in them tells the two
-apart. One problem, one ticket. If the parser fix leaves `booking-v3` form bookings swapped, that is
-the time to open a ticket for the form.
+The reports the desk read as a one-day move stay here: by tenant they are parser reports, and the
+table counts them where they are filed.
 
-<ProblemReports ticket={4471} problem="swap" />
+### `hint` · [#2](https://github.com/olafsulich/support-kb/issues/2)
 
-### `day-move`: one day off, not a month
+Tenants on `booking-v3` print `MM/DD/YYYY` under the date field. People type what the hint says,
+month first, and the form reads it the tenant's way, day first. The symptom is the same swap, so the
+subject lines match and decision 0001 merged them, but the parser fix does not touch it. Only the
+form, only `booking-v3` tenants.
 
-These reports describe no swap. A booking moves by one day, an invite arrives before the booking
-was made, two clients in different time zones get different days for the same meeting, every June
-booking is off by a day. That is a time zone or day boundary problem, not date order. The desk
-already noted them (`desk-notes.json`), and the old table still counts them under `parser`. The
-parser fix will not close them.
+Intake tags each report from the reporter's browser. That tag is a guess, and it disagrees with the
+tenant: see "tagged as" in the table. Count by tenant, never by tag.
 
-<ProblemReports ticket={4471} problem="day-move" />
+## Since April
+
+<QueueTimeline ticket={4471} />
 
 ## Why one ticket hid two
 
 Reports are merged on subject alone ([decision 0001](/kb/decisions/0001-dedupe-by-subject)).
-Subjects like "Date is wrong" fit both problems, so all of them landed in #4471. The old table, for
-comparison: it splits the swap in two by way in, and footnotes the one-day moves.
-
-<CauseTable ticket={4471} />
+Subjects like "Date is wrong" fit both causes, so both landed in #4471.
 
 ## For the desk
 
-- Before you mark a big ticket known, read what its reports describe, not only their subjects.
-- A report that does not fit the cause gets its own ticket, not a footnote.
+- Before you mark a big ticket known, run its reports through the cause table, not the subject.
+- A row in red is a cause without a ticket: open one.
 
 <RenderStamp {signature} />

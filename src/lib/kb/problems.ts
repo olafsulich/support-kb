@@ -1,12 +1,14 @@
-// What #4471 holds, one problem at a time. causes.ts places a report by its tenant; the desk's own
-// notes (desk-notes.json) mark reports that read as a one-day move, which no tenant rule explains.
+// What #4471 holds, one problem at a time, by what the reports describe. A day-first tenant's date
+// comes out with day and month swapped, whichever way in (causes.ts splits `parser` from `hint`, but
+// the reports show one swap). The desk's own notes (desk-notes.json) mark reports that read as a
+// one-day move: no swap, a different problem.
 import { causeOf, uniqueById, type Report, type Tenant } from '#lib/kb/causes';
 
-export type Problem = 'parser' | 'hint' | 'day-move' | 'unplaced';
+export type Problem = 'swap' | 'day-move' | 'unplaced';
 
 export function problemOf(r: Report, t: Tenant | undefined, dayMoves: readonly string[]): Problem {
   if (dayMoves.includes(r.id)) return 'day-move';
-  return causeOf(r, t) ?? 'unplaced';
+  return causeOf(r, t) === null ? 'unplaced' : 'swap';
 }
 
 export type ProblemGroup = {

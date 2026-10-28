@@ -9,8 +9,7 @@
   let { ticket }: { ticket: number } = $props();
 
   const WHAT: Record<Problem, string> = {
-    parser: 'the shared parser reads a day-first date month first',
-    hint: 'booking-v3 prints MM/DD/YYYY under the date; people type that and the form reads it day first',
+    swap: 'a day-first date comes out with day and month swapped',
     'day-move': 'the date lands one day off, or on a different day per time zone',
     unplaced: 'no tenant on file: the desk cannot place these yet',
   };

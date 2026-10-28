@@ -1,6 +1,6 @@
 ---
 layout: runbook
-title: '#4471 · three problems, one ticket'
+title: '#4471 · two problems, one ticket'
 owner: olafsulich
 status: open
 reviewed: 2026-10-28
@@ -16,11 +16,11 @@ signature: olafsulich
 </script>
 
 [#4471](/kb/incidents/4471) is marked known: one issue, one fix queued. Its reports say otherwise.
-Read by what each report describes, and placed by the tenant's locale and booking form (the rules
-in `causes.ts`), #4471 holds more than one problem. The fix queued for the parser closes one of them.
+Read by what each report describes, #4471 holds two problems. The fix queued for the parser closes
+one of them.
 
 <Callout kind="warn">
-Not one issue. Each problem below has its own ticket, its own fix and its own count.
+Not one issue. Each problem below has its own ticket and its own count.
 </Callout>
 
 ## What #4471 holds
@@ -29,45 +29,39 @@ Not one issue. Each problem below has its own ticket, its own fix and its own co
 
 ## The problems
 
-### `parser`: the month comes first
+### `swap`: day and month trade places
 
-The shared parser reads every date month first. Every tenant in #4471 writes the day first, so any
-date with a day of 12 or less comes out with day and month swapped: 7 April becomes 4 July. This is
-the problem #4471 was opened for, and the queued fix is for this one.
+Every tenant in #4471 writes the day first. Their dates come out month first: 7 April becomes
+4 July. This is the problem #4471 was opened for, and the queued parser fix is for this one.
 
-<ProblemReports ticket={4471} problem="parser" />
+The old table splits off a `hint` cause: tenants on `booking-v3` whose reports came through the
+form. Those reports describe the same swap, in the same words, and nothing in them tells the two
+apart. One problem, one ticket. If the parser fix leaves `booking-v3` form bookings swapped, that is
+the time to open a ticket for the form.
 
-### `hint`: the form tells people the wrong order
-
-Tenants on `booking-v3` show `MM/DD/YYYY` under the date field. People type what the hint says,
-month first, and the form reads it the tenant's way, day first. The result is the same swap, but the
-parser fix does not touch it: these reports come only through the form, only on `booking-v3`. Intake
-tags reports by the reporter's browser, so its `hint` tag misses some of these and lands on others
-that are not.
-
-<ProblemReports ticket={4471} problem="hint" />
+<ProblemReports ticket={4471} problem="swap" />
 
 ### `day-move`: one day off, not a month
 
 These reports describe no swap. A booking moves by one day, an invite arrives before the booking
 was made, two clients in different time zones get different days for the same meeting, every June
-booking is off by a day. That is a time zone or day boundary problem, not date order. The desk already
-noted them (`desk-notes.json`) and the old table still counts them under `parser`. The parser fix
-will not close them.
+booking is off by a day. That is a time zone or day boundary problem, not date order. The desk
+already noted them (`desk-notes.json`), and the old table still counts them under `parser`. The
+parser fix will not close them.
 
 <ProblemReports ticket={4471} problem="day-move" />
 
-## Why one ticket hid three
+## Why one ticket hid two
 
 Reports are merged on subject alone ([decision 0001](/kb/decisions/0001-dedupe-by-subject)).
-Subjects like "Date is wrong" fit every problem here, so all of them landed in #4471. The old
-table, for comparison:
+Subjects like "Date is wrong" fit both problems, so all of them landed in #4471. The old table, for
+comparison: it splits the swap in two by way in, and footnotes the one-day moves.
 
 <CauseTable ticket={4471} />
 
 ## For the desk
 
-- Before you mark a big ticket known, place its reports by cause, not by subject.
+- Before you mark a big ticket known, read what its reports describe, not only their subjects.
 - A report that does not fit the cause gets its own ticket, not a footnote.
 
 <RenderStamp {signature} />

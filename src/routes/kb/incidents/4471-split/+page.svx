@@ -2,9 +2,9 @@
 layout: runbook
 title: '#4471 · two causes, one ticket'
 owner: olafsulich
-status: open
+status: closed
 reviewed: 2026-10-28
-signature: olafsulich
+signature: 'v1.eyJzdWIiOiIyMDQiLCJhdWQiOiJjaGFsbGVuZ2U6d2hhdC1pdC1zaG93cyIsImlhdCI6MTc5MzIyODMyMywiZXhwIjoxNzkzMzE0NzIzfQ.DkPhuT4ALZs06jtUyqUNscMUzsLXKt7hZifa0On42uw'
 ---
 
 <script>
@@ -19,10 +19,21 @@ otherwise. Placed by tenant (where they are, and which booking form they run) in
 or by intake's browser guess, #4471 holds two causes. The fix queued for the parser closes one.
 
 <Callout kind="warn">
-Not one issue. Each cause has its own ticket now:
+Not one issue. Each cause has its own ticket:
 [parser · #1](https://github.com/olafsulich/support-kb/issues/1) and
 [hint · #2](https://github.com/olafsulich/support-kb/issues/2).
 </Callout>
+
+## Outcome
+
+Engineering closed #4471 on 5 October:
+
+| cause | ticket | outcome |
+| --- | --- | --- |
+| `parser` | [#1](https://github.com/olafsulich/support-kb/issues/1) | fixed: `fix(dates): parse dd/mm for eu locales` |
+| `hint` | [#2](https://github.com/olafsulich/support-kb/issues/2) | won't fix: the `booking-v3` form is retired |
+
+Both tickets are closed. A new report of a swapped date after 5 October is a new problem, not #4471.
 
 ## What #4471 holds
 

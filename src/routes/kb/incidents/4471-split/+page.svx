@@ -46,8 +46,8 @@ the time to open a ticket for the form.
 These reports describe no swap. A booking moves by one day, an invite arrives before the booking
 was made, two clients in different time zones get different days for the same meeting, every June
 booking is off by a day. That is a time zone or day boundary problem, not date order. The desk
-already noted them (`desk-notes.json`), and the old table still counts them under `parser`. The
-parser fix will not close them.
+already noted them (`desk-notes.json`). As the desk counts, they stay counted where they were
+filed, under the swap, and count again here. The parser fix will not close them.
 
 <ProblemReports ticket={4471} problem="day-move" />
 

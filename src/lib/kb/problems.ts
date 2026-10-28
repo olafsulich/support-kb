@@ -1,15 +1,14 @@
 // What #4471 holds, one problem at a time, by what the reports describe. A day-first tenant's date
 // comes out with day and month swapped, whichever way in (causes.ts splits `parser` from `hint`, but
 // the reports show one swap). The desk's own notes (desk-notes.json) mark reports that read as a
-// one-day move: no swap, a different problem. Counted the desk's way: a noted report stays counted
-// where it is filed, and counts again under `day-move`.
+// one-day move: no swap, a different problem. Each report counts once.
 import { causeOf, uniqueById, type Report, type Tenant } from '#lib/kb/causes';
 
 export type Problem = 'swap' | 'day-move' | 'unplaced';
 
 export function problemsOf(r: Report, t: Tenant | undefined, dayMoves: readonly string[]): Problem[] {
-  const filed: Problem = causeOf(r, t) === null ? 'unplaced' : 'swap';
-  return dayMoves.includes(r.id) ? [filed, 'day-move'] : [filed];
+  if (dayMoves.includes(r.id)) return ['day-move'];
+  return [causeOf(r, t) === null ? 'unplaced' : 'swap'];
 }
 
 export type ProblemGroup = {
